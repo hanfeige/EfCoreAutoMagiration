@@ -1,8 +1,14 @@
-* Step 1: Add the definition of the migrated entity in DbContext
-    * There are two ways to add it, or in any way you like
-    * public DbSet MigrationLogs { get; The set; }
-* Step 2: Create your DbContext in any way and execute the AutoMigratorDatabase method
-    * Using(var DB = new TestDynamicDbContext())
-    {
-        Db.AutoMigratorDatabase();
-    }
+# The document
+## Step 1
+Add MigrationLog to the DbContext, and you have two ways to add it, either by DbSet or by calling AddEntityForMigrationLog from OnModelCreating
+>1.` public DbSet<MigrationLog> MigrationLogs { get; set; }` 
+
+>2.` modelBuilder.AddEntityForMigrationLog();` 
+## Step 2
+Create your DbContext in any way and execute the AutoMigratorDatabase method
+>` 
+using (var db = new TestDynamicDbContext())
+ {
+                db.AutoMigratorDatabase();
+}
+` 
