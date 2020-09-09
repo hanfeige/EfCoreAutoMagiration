@@ -80,13 +80,16 @@ namespace Kings.EntityFrameworkCore.AutoMigration
         private static int ExecuteListSqlCommand(this DbContext dbContext, List<string> sqlList)
         {
             int retunInt = 0;
-            try
+            using (var transaction = dbContext.Database.BeginTransaction())
             {
-                sqlList.ForEach(cmd => retunInt += dbContext.Database.ExecuteSqlRaw(cmd));
-            }
-            catch (DbException ex)
-            {
-                dbContext.Database.RollbackTransaction();
+                try
+                {
+                    sqlList.ForEach(cmd => retunInt += dbContext.Database.ExecuteSqlRaw(cmd));
+                }
+                catch (DbException ex)
+                {
+                    dbContext.Database.RollbackTransaction();
+                }
             }
             return retunInt;
         }
